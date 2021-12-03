@@ -1,0 +1,36 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+
+    fstream inFile;
+    int measurementFirst = 0, measurementSecond = 0, counter = 0, temp = 0;
+
+    string filename = "input.txt";
+    inFile.open("input.txt");
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+    inFile >> measurementFirst;
+    inFile >> measurementSecond;
+    if(measurementSecond > measurementFirst)
+        ++counter;
+    temp = measurementSecond;
+
+    while(inFile.good())
+    {
+        inFile >> measurementFirst;
+        if(measurementFirst > temp)
+            ++counter;
+        temp = measurementFirst;
+    }
+
+    cout << counter << '\n';
+    inFile.close();
+    
+    return 0;
+}
