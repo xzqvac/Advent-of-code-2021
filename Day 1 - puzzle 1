@@ -10,7 +10,7 @@ int main() {
     int measurementFirst = 0, measurementSecond = 0, counter = 0, temp = 0;
 
     string filename = "input.txt";
-    inFile.open("input.txt");
+    inFile.open(filename);
     if (!inFile.is_open())
     {
         cout << "File doesn't exists" << '\n';
