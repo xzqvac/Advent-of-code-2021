@@ -1,0 +1,36 @@
+#include <iostream>
+#include <fstream>
+#include <utility>
+
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+
+    fstream inFile;
+    int horizontalPos = 0, depth = 0, valueOfDirection = 0;
+    string direction;
+
+
+    string filename = "input.txt";
+    inFile.open(filename);
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+
+    while(!inFile.eof())
+    {
+        inFile >> direction >> valueOfDirection;
+        pair <string, int> command (direction, valueOfDirection);
+        if(command.first == "forward")
+            horizontalPos += command.second;
+        else if(command.first == "up")
+            depth -= command.second;
+        else
+            depth += command.second;
+    }
+    cout << "Final result: " << horizontalPos * depth << '\n';
+
+    return 0;
+}
