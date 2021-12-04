@@ -1,0 +1,50 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+
+    fstream inFile;
+    int counter = 0, measurements[2000];
+    int sumA = 0, sumB = 0, sumC = 0, sumD = 0, temp = 0;
+
+    string filename = "input.txt";
+    inFile.open(filename);
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+
+    for(int & measurement : measurements)
+        inFile >> measurement;
+
+
+    for(int i = 1; i < 1999; i++)
+    {
+        if(i % 4 == 1)
+        {
+            sumA = measurements[i - 1] + measurements[i] + measurements[i + 1];
+            if(i != 1 && sumA > temp)
+                ++counter;
+        }
+        else if(i % 4 == 2)
+            sumB = measurements[i - 1] + measurements[i] + measurements[i + 1];
+        else if(i % 4 == 3)
+            sumC = measurements[i - 1] + measurements[i] + measurements[i + 1];
+        else
+        {
+            sumD = measurements[i - 1] + measurements[i] + measurements[i + 1];
+            if (sumB > sumA)
+                ++counter;
+            if (sumC > sumB)
+                ++counter;
+            if (sumD > sumC)
+                ++counter;
+            temp = sumD;
+        }
+    }
+    cout << counter << '\n';
+    return 0;
+}
