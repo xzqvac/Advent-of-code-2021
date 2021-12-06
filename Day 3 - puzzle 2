@@ -1,0 +1,49 @@
+#include <iostream>
+#include <fstream>
+#include <bits/stdc++.h>
+#include <vector>
+
+using namespace std;
+const int bits = 12;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+
+    fstream inFile;
+    vector<bitset<bits>> set12;
+    bitset<bits> oxygen_generator_rating, CO2_scrubber_rating;
+    string line;
+    string filename = "input.txt";
+    inFile.open(filename);
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+
+    while(inFile >> line)
+    {
+        set12.emplace_back(line);
+    }
+    vector<bitset<bits>> most_common(set12);
+    for(int i = bits - 1; i >= 0 && most_common.size() > 1; i--)
+    {
+        array<vector<bitset<bits>>, 2> filtered;
+        for(auto set12 : most_common)
+            filtered[set12[i]].push_back(set12);
+        most_common = filtered[0].size() > filtered[1].size() ? filtered[0] : filtered[1];
+    }
+    oxygen_generator_rating = most_common.at(0);
+
+    vector<bitset<bits>> lest_common(set12);
+    for(int i = bits - 1; i >= 0 && lest_common.size() > 1; i--)
+    {
+        array<vector<bitset<bits>>, 2> filtered;
+        for(auto set12 : lest_common)
+            filtered[set12[i]].push_back(set12);
+        lest_common = filtered[0].size() > filtered[1].size() ? filtered[1] : filtered[0];
+    }
+    CO2_scrubber_rating = lest_common.at(0);
+    cout << CO2_scrubber_rating.to_ulong() * oxygen_generator_rating.to_ulong() << endl;
+
+    return 0;
+}
