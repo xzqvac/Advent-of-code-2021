@@ -1,25 +1,18 @@
 #include <iostream>
 #include <fstream>
-#include <utility>
-#include <vector>
-#include <numeric>
-#include <string>
 #include <bits/stdc++.h>
-
-#include <algorithm>
+#include <vector>
 
 using namespace std;
+const int bits = 12;
 
 int main() {
     ios_base::sync_with_stdio(false);
 
     fstream inFile;
+    vector<bitset<bits>> set12;
+    bitset<bits> gamma_rate, epsilon_rate;
     string line;
-    int PosOne, PosTwo, PosThr, PosFou, PosFiv, PosSix, PosSev, PosEig, PosNin, PosTen, PosElv, PosTwe;
-    string gammaRate, epsilonRate;
-    vector <int> ColumnOne, ColumnTwo, ColumnThree, ColumnFour, ColumnFive, ColumnSix, ColumnSeven, ColumnEight,
-    ColumnNine, ColTen, ColElv, ColTwe;
-
     string filename = "input.txt";
     inFile.open(filename);
     if (!inFile.is_open())
@@ -27,89 +20,21 @@ int main() {
         cout << "File doesn't exists" << '\n';
     }
 
-    while(!inFile.eof())
+    while(inFile >> line)
     {
-        inFile >> line;
-        PosOne = line[0] - 48;
-        ColumnOne.push_back(PosOne);
-        PosTwo = line[1] - 48;
-        ColumnTwo.push_back(PosTwo);
-        PosThr = line[2] - 48;
-        ColumnThree.push_back(PosThr);
-        PosFou = line[3] - 48;
-        ColumnFour.push_back(PosFou);
-        PosFiv = line[4] - 48;
-        ColumnFive.push_back(PosFiv);
-        PosSix=line[5] - 48;
-        ColumnSix.push_back(PosSix);
-        PosSev = line[6] - 48;
-        ColumnSeven.push_back(PosSev);
-        PosEig = line[7] - 48;
-        ColumnEight.push_back(PosEig);
-        PosNin = line[8] - 48;
-        ColumnNine.push_back(PosNin);
-        PosTen = line[9] - 48;
-        ColTen.push_back(PosTen);
-        PosElv = line[10] - 48;
-        ColElv.push_back(PosElv);
-        PosTwe = line[11] - 48;
-        ColTwe.push_back(PosTwe);
+        set12.emplace_back(line);
     }
-        if (count(ColumnOne.begin(), ColumnOne.end(), 0) > count(ColumnOne.begin(), ColumnOne.end(), 1))
-            gammaRate += "0";
-        else
-            gammaRate += "1";
-
-        if (count(ColumnTwo.begin(), ColumnTwo.end(), 0) > count(ColumnTwo.begin(), ColumnTwo.end(), 1))
-            gammaRate += "0";
-        else
-            gammaRate += "1";
-
-        if (count(ColumnThree.begin(), ColumnThree.end(), 0) > count(ColumnThree.begin(), ColumnThree.end(), 1))
-            gammaRate += "0";
-        else
-            gammaRate += "1";
-
-        if (count(ColumnFour.begin(), ColumnFour.end(), 0) > count(ColumnFour.begin(), ColumnFour.end(), 1))
-            gammaRate += "0";
-        else
-            gammaRate += "1";
-        if (count(ColumnFive.begin(), ColumnFive.end(), 0) > count(ColumnFive.begin(), ColumnFive.end(), 1))
-            gammaRate += "0";
-        else
-            gammaRate += "1";
-    if (count(ColumnSix.begin(), ColumnSix.end(), 0) > count(ColumnSix.begin(), ColumnSix.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    if (count(ColumnSeven.begin(), ColumnSeven.end(), 0) > count(ColumnSeven.begin(), ColumnSeven.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    if (count(ColumnEight.begin(), ColumnEight.end(), 0) > count(ColumnEight.begin(), ColumnEight.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    if (count(ColumnNine.begin(), ColumnNine.end(), 0) > count(ColumnNine.begin(), ColumnNine.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    if (count(ColTen.begin(), ColTen.end(), 0) > count(ColTen.begin(), ColTen.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    if (count(ColElv.begin(), ColElv.end(), 0) > count(ColElv.begin(), ColElv.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    if (count(ColTwe.begin(), ColTwe.end(), 0) > count(ColTwe.begin(), ColTwe.end(), 1))
-        gammaRate += "0";
-    else
-        gammaRate += "1";
-    cout << gammaRate << endl;
-    int gR = stoi(gammaRate, nullptr, 2);
-
-    cout << gR << endl;
+    for(int i = bits - 1; i >= 0; i--)
+    {
+        int counts[2] {0, 0};
+        for(auto set : set12)
+        {
+            ++counts[set[i]];
+        }
+        gamma_rate[i] = counts[0] > counts[1] ? 0 : 1;
+    }
+    epsilon_rate = bitset<bits>(gamma_rate).flip();
+    cout << epsilon_rate.to_ulong() * gamma_rate.to_ulong() << endl;
 
     return 0;
 }
