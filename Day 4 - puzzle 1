@@ -1,0 +1,94 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <sstream>
+
+using namespace std;
+
+
+string isWinner(const vector<pair<int, bool>>& element, int index)
+{
+    for(int i = 0; i < element.size();i++)
+    {
+        //int row = (index - (index % 5)) / 5;
+        int row = index - index % 5;
+        //int col = index % 5;
+        int col = index % 5;
+        int sumR = 0;
+        int sumC = 0;
+        for(; row < row + 5; row++)
+        {
+            if(element[row].second)
+                ++sumR;
+            if(sumR == 5)
+                return "wygrana";
+        }
+        for(; col < col + 5; col++)
+        {
+            if (element[col].second)
+                ++sumC;
+            if (sumC == 5)
+                return "wygrana";
+        }
+    }
+}
+
+int main() {
+
+    ios_base::sync_with_stdio(false);
+    int value = 0;
+    fstream inFile;
+    string firstLine;
+    vector<int> numbersToMark;
+    vector<pair<int, bool>> numbersOnBoard;
+    vector<vector<pair<int, bool>>> boards;
+
+    string filename = "input.txt";
+    inFile.open(filename);
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+    inFile >> firstLine;
+    istringstream stringToInt(firstLine);
+
+    for(int val; stringToInt >> val;)
+    {
+        numbersToMark.push_back(val);
+        if(stringToInt.peek() == ',')
+            stringToInt.ignore();
+    }
+
+
+    int amountOfNumbersOnBoard = 1;
+    while(inFile >> value)
+    {
+        bool triggered = false;
+        numbersOnBoard.emplace_back(value, triggered);
+        ++amountOfNumbersOnBoard;
+        if(amountOfNumbersOnBoard == 25)
+        {
+            boards.push_back(numbersOnBoard);
+            amountOfNumbersOnBoard = 0;
+        }
+    }
+
+
+    for(int z = 0; z < numbersToMark.size(); z++)
+    {
+        for(int x = 0; x < boards.size(); x++)
+        {
+            for(int y = 0; y < boards[x].size(); y++)
+            {
+                if(boards[x][y].first == z)
+                    boards[x][y].second = true;
+                if(z > 3)
+                    isWinner(boards[x], z);
+            }
+        }
+    }
+
+    return 0;
+}
