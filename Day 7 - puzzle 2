@@ -1,0 +1,56 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <cmath>
+
+using namespace std;
+
+double Average(vector<int> data)
+{
+    int sum = accumulate(data.begin(), data.end(), 0);
+    double average = round(sum / data.size());
+
+    return average;
+}
+
+double AmountOfFuel(const vector<int>& data, double average)
+{
+    int fuel = 0;
+    for(auto position : data)
+    {
+        for(int x = 1; x <= abs(position - average); x++)
+            fuel += x;
+    }
+    return fuel;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    int fuel = 0;
+    fstream inFile;
+    string line;
+    string filename = "input.txt";
+    inFile.open(filename);
+
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+    inFile >> line;
+    istringstream stringToInt(line);
+    vector <int> positions;
+    for(int val = 0; stringToInt >> val;)
+    {
+        positions.push_back(val);
+        if(stringToInt.peek() == ',')
+            stringToInt.ignore();
+    }
+    double average = Average(positions);
+    fuel = AmountOfFuel(positions, average);
+    cout << fuel << "\n";
+
+    return 0;
+}
