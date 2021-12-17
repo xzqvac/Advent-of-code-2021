@@ -1,0 +1,57 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int Median(vector<int> data)
+{
+    int median = 0;
+    sort(data.begin(), data.end());
+    if(data.size() % 2 != 0)
+        return data[data.size()/2];
+    else
+        return data[(data.size()/2 - 1 + data.size()/2 + 1) / 2];
+}
+
+int AmountOfFuel(const vector<int>& data, int mediana)
+{
+    int fuel = 0;
+    for(auto position : data)
+    {
+        fuel += abs(position - mediana);
+    }
+    return fuel;
+}
+
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    int mediana = 0, fuel = 0;
+    fstream inFile;
+    string line;
+    string filename = "input.txt";
+    inFile.open(filename);
+
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+    inFile >> line;
+    istringstream stringToInt(line);
+    vector <int> positions;
+    for(int val = 0; stringToInt >> val;)
+    {
+        positions.push_back(val);
+        if(stringToInt.peek() == ',')
+            stringToInt.ignore();
+    }
+
+    mediana = Median(positions);
+    fuel = AmountOfFuel(positions, mediana);
+    cout << fuel << endl;
+
+    return 0;
+}
