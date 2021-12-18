@@ -1,0 +1,52 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+
+    int amountOfDays = 0;
+    fstream inFile;
+    string line;
+    string filename = "input.txt";
+    inFile.open(filename);
+
+    if (!inFile.is_open())
+    {
+        cout << "File doesn't exists" << '\n';
+    }
+    inFile >> line;
+    istringstream stringToInt(line);
+    vector <int> growth;
+    for(int val = 0; stringToInt >> val;)
+    {
+        growth.push_back(val);
+        if(stringToInt.peek() == ',')
+            stringToInt.ignore();
+    }
+
+    for(int day = 1; day <= 80; day++)
+    {
+        int temp = 0;
+        for(int & x : growth)
+        {
+            --x;
+            if(x == -1)
+            {
+                x = 6;
+                ++temp;
+            }
+        }
+        for(int y = 0; y < temp; y++)
+            growth.push_back(8);
+
+        cout << "Day: "<< day << " " <<  growth.size() << endl;
+
+    }
+
+    return 0;
+}
